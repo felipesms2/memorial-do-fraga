@@ -14,10 +14,15 @@ return new class extends Migration
         Schema::create('videos', function (Blueprint $table) {
             $table->id();
             $table->string("title");
+            $table->string("channelId");
+            $table->string("kind");
             $table->string("etag");
-            $table->string("id");
+            $table->string("video_id");
             $table->dateTime("publishedAt");
             $table->longText("description");
+            $table->string("categoryId");
+            $table->string("liveBroadcastContent");
+            $table->string("defaultAudioLanguage");
             $table->timestamps();
         });
     }

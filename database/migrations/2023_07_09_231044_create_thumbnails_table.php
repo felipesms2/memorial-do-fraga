@@ -11,8 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('thumbnails', function (Blueprint $table) {
+        Schema::create('thumbnails', function (Blueprint $table)
+        {
             $table->id();
+            $table->string("title_thumb"); /* if default, medium etc */
             $table->unsignedBigInteger("video_id");
             $table->string("url");
             $table->unsignedInteger("width");
