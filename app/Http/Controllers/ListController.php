@@ -18,7 +18,13 @@ class ListController extends Controller
   {
    dd(fgetcsv($file));
   }
-
+  // Endpoint
+    /*   https://www.googleapis.com/youtube/v3/videos?part=id%2C+snippet&id=fL5cWD84mYw&
+        id=XYe94GtMkJQ&
+        id=qzq2lJZBtCs&
+        id=lHlH94GklAE&
+        id=Mc4ByWixwdw&
+    key=AIzaSyBB93pQFssH3DTGXfROEojYCJARPOzQj04&id=GOuSNVTKfRs */
 fclose($file);
         die;
         return ".." . __DIR__;
