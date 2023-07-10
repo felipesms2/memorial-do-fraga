@@ -11,6 +11,17 @@ class ListController extends Controller
      */
     public function index()
     {
+        $fileToRead  =__DIR__ . "../../../../resources/video_list.csv";
+        $file = fopen($fileToRead,"r");
+        var_dump(fgetcsv($file));
+        while(! feof($file))
+  {
+   dd(fgetcsv($file));
+  }
+
+fclose($file);
+        die;
+        return ".." . __DIR__;
         return [1,2,3];
     }
 
