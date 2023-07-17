@@ -13,16 +13,23 @@ class ListController extends Controller
     {
         $fileToRead  = __DIR__ . "../../../../resources/video_list.csv";
         $file = fopen($fileToRead,"r");
+        $queryId ="";
         // var_dump(fgetcsv($file));
         $count = 0;
         while(! feof($file))
     {
 
-        dump($count);
-        dump(fgetcsv($file)[1]);
+        // dump($count);
+        // dump(fgetcsv($file)[1]);
+        $queryId .= "&id=" .fgetcsv($file)[1] ;
+        $endpoint = "https://www.googleapis.com/youtube/v3/videos?part=id%2C+snippet&" . $queryId .
+        "&key=AIzaSyBB93pQFssH3DTGXfROEojYCJARPOzQj04&id=GOuSNVTKfRs"
+        ;
+        // dump($queryId);
         $count++;
-        if ($count>5)
+        if ($count==20)
         {
+            dump($endpoint);
             die;
         }
     }
