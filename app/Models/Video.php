@@ -8,4 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class Video extends Model
 {
     use HasFactory;
+    protected $fillable =
+    [
+        'title',
+        'channelId',
+        'kind',
+        'video_id',
+        'etag',
+        'publishedAt',
+        'description',
+        'categoryId',
+        'defaultAudioLanguage',
+        'liveBroadcastContent'
+    ];
 }

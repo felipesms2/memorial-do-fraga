@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use GuzzleHttp\Client;
+use App\Models\Video;
+use Carbon\Carbon;
 
 class ListController extends Controller
 {
@@ -29,10 +32,79 @@ class ListController extends Controller
         $count++;
         if ($count==20)
         {
-            dump($endpoint);
+        	$client = new Client();
+		$response = $client->get($endpoint);
+
+		$data = json_decode($response->getBody(),
+		false);
+
+/*
+echo "<pre>";
+var_dump($data);
+echo "</pre> <br> <hr>";
+*/
+// dd($data->items);
+$titles = [];
+foreach ($data->items as $item)
+{
+    $sni = $item->snippet;
+    // $table->string("title");
+    // $table->string("channelId");
+    // $table->string("kind");
+    // $table->string("etag");
+    // $table->string("video_id");
+    // $table->dateTime("publishedAt");
+    // $table->longText("description");
+    // $table->string("categoryId");
+    // $table->string("liveBroadcastContent");
+    // $table->string("defaultAudioLanguage");
+
+    $title = $sni->title;
+    $channelId = $sni->channelId;
+    $kind=$item->kind;
+    $etag=$item->etag;
+    $video_id=$item->id;
+    $publishedAt = Carbon::parse($sni->publishedAt, 'UTC');
+    $description = $sni->description;
+    $categoryId = $sni->categoryId  ;
+    $defaultAudioLanguage = $sni->defaultAudioLanguage;
+    $liveBroadcastContent = $sni->liveBroadcastContent;
+
+    $insertVideo = Video::Create(
+        [
+            "title" => $title,
+            "channelId" => $channelId,
+            "kind" => $kind,
+            "video_id" => $video_id,
+            "etag" => $etag,
+            "publishedAt" => $publishedAt,
+            "description" => $description,
+            "categoryId" => $categoryId,
+            "defaultAudioLanguage" => $defaultAudioLanguage,
+            "liveBroadcastContent" => $liveBroadcastContent,
+        ]
+    );
+
+    return $insertVideo;
+
+}
+dump($data->items);
+echo "<pre>";
+  print_r($titles);
+echo "</pre>";
+
             die;
         }
+
     }
+
+    /*
+    try {
+    $pdo = new PDO('sqlite:../../../database/database.sqlite');
+    echo "Conexão efetuada com sucesso.";
+} catch (PDOException $e) {
+    echo "Erro ao conectar ao banco de dados: " . $e->getMessage();
+}*/
   // Endpoint
     /*   https://www.googleapis.com/youtube/v3/videos?part=id%2C+snippet&id=fL5cWD84mYw&
         id=XYe94GtMkJQ&
@@ -91,6 +163,6 @@ fclose($file);
      */
     public function destroy(string $id)
     {
-        //
+        echo "ola mundo";
     }
 }

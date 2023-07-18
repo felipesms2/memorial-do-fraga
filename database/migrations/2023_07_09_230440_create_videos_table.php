@@ -3,7 +3,6 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-
 return new class extends Migration
 {
     /**
@@ -18,7 +17,7 @@ return new class extends Migration
             $table->string("kind");
             $table->string("etag");
             $table->string("video_id");
-            $table->dateTime("publishedAt");
+            $table->timestamp("publishedAt");
             $table->longText("description");
             $table->string("categoryId");
             $table->string("liveBroadcastContent");
