@@ -6,44 +6,39 @@ use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 use App\Models\Video;
 use Carbon\Carbon;
+use App\Traits\AdditionalVideoDataTrait;
 
 class ListController extends Controller
 {
+    use AdditionalVideoDataTrait;
     /**
      * Display a listing of the resource.
      */
+
     public function index()
     {
+        $count = 1;
         $fileToRead  = __DIR__ . "../../../../resources/video_list.csv";
         $file = fopen($fileToRead,"r");
         $queryId ="";
-        // var_dump(fgetcsv($file));
-        $count = 0;
+        $bunchID = [];
+
         while(! feof($file))
     {
 
-        // dump($count);
-        // dump(fgetcsv($file)[1]);
-        $queryId .= "&id=" .fgetcsv($file)[1] ;
-        $endpoint = "https://www.googleapis.com/youtube/v3/videos?part=id%2C+snippet&" . $queryId .
-        "&key=AIzaSyBB93pQFssH3DTGXfROEojYCJARPOzQj04&id=GOuSNVTKfRs"
-        ;
-        // dump($queryId);
-        $count++;
-        if ($count==20)
+        if( $text =fgetcsv($file)){
+            $bunchID[] = $text[1];
+        }
+
+        if (1==25)
         {
         	$client = new Client();
-		$response = $client->get($endpoint);
+	    	$response = $client->get($endpoint);
 
 		$data = json_decode($response->getBody(),
 		false);
 
-/*
-echo "<pre>";
-var_dump($data);
-echo "</pre> <br> <hr>";
-*/
-// dd($data->items);
+
 $titles = [];
 foreach ($data->items as $item)
 {
@@ -85,16 +80,13 @@ foreach ($data->items as $item)
         ]
     );
 
-    return $insertVideo;
+    // return $insertVideo;
 
 }
-dump($data->items);
-echo "<pre>";
-  print_r($titles);
-echo "</pre>";
 
-            die;
         }
+
+        // dd($bunchID);
 
     }
 
@@ -113,10 +105,78 @@ echo "</pre>";
         id=Mc4ByWixwdw&
     key=AIzaSyBB93pQFssH3DTGXfROEojYCJARPOzQj04&id=GOuSNVTKfRs */
 fclose($file);
-        die;
-        return ".." . __DIR__;
-        return [1,2,3];
+    $group25 = array_chunk($bunchID, 25);
+    foreach ($group25 as $g)
+        {
+            foreach ($g as $u)
+            {
+                $queryId .= "&id=" . $u ;
+                $endpoint = "https://www.googleapis.com/youtube/v3/videos?part=id%2C+snippet&" . $queryId .
+                "&key=AIzaSyBB93pQFssH3DTGXfROEojYCJARPOzQj04&id=GOuSNVTKfRs";
+            }
+            $client = new Client();
+            $response = $client->get($endpoint);
+            $data = json_decode($response->getBody());
+            $titles = [];
+foreach ($data->items as $item)
+{
+    $this->prepareThumb($item->snippet->thumbnails);
+    // dd(key((array)$item->snippet->thumbnails));
+    return $item->snippet->thumbnails;
+    $sni = $item->snippet;
+    // $table->string("title");
+    // $table->string("channelId");
+    // $table->string("kind");
+    // $table->string("etag");
+    // $table->string("video_id");
+    // $table->dateTime("publishedAt");
+    // $table->longText("description");
+    // $table->string("categoryId");
+    // $table->string("liveBroadcastContent");
+    // $table->string("defaultAudioLanguage");
+
+    $sni->defaultAudioLanguage = "NONE";
+    $titles[]= $sni->title;
+    $title = $sni->title;
+    $channelId = $sni->channelId;
+    $kind=$item->kind;
+    $etag=$item->etag;
+    $video_id=$item->id;
+    $publishedAt = Carbon::parse($sni->publishedAt, 'UTC');
+    $description = $sni->description;
+    $categoryId = $sni->categoryId  ;
+    if(isset($sni->defaultAudioLanguage))
+    {
+        $defaultAudioLanguage = $sni->defaultAudioLanguage;
     }
+
+    $liveBroadcastContent = $sni->liveBroadcastContent;
+
+    $insertVideo = Video::Create(
+        [
+            "title" => $title,
+            "channelId" => $channelId,
+            "kind" => $kind,
+            "video_id" => $video_id,
+            "etag" => $etag,
+            "publishedAt" => $publishedAt,
+            "description" => $description,
+            "categoryId" => $categoryId,
+            "defaultAudioLanguage" => $defaultAudioLanguage,
+            "liveBroadcastContent" => $liveBroadcastContent,
+        ]
+    );
+
+    return $insertVideo;
+        }
+
+        dump($titles);
+        $queryId = "";
+
+    }
+}
+
+
 
     /**
      * Show the form for creating a new resource.
