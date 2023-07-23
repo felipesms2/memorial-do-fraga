@@ -4,7 +4,7 @@ namespace App\Traits;
 
 trait AdditionalVideoDataTrait
     {
-        public function prepareThumb($thumbData)
+        public function prepareThumb($thumbData, $video_id = 0)
         {
             $thumbToInsert =[];
             $thumbData = (array)$thumbData;
@@ -12,11 +12,11 @@ trait AdditionalVideoDataTrait
             foreach ($bunchThumbLabel as $r)
             {
                 $thumbDataConverted =(array)$thumbData[$r];
-                dump($r);
-                dd($thumbDataConverted);
-                dump($r);
+                $thumbDataConverted['title_thumb'] = $r;
+                $thumbDataConverted['video_id'] = $video_id;
+                $thumbToInsert[] = $thumbDataConverted;
             }
-            dd("a");
+            return ($thumbToInsert);
         }
     }
 

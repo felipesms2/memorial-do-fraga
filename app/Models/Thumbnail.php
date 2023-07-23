@@ -8,4 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Thumbnail extends Model
 {
     use HasFactory;
+    protected $fillable =
+    [
+        'url',
+        'width',
+        'height',
+        'title_thumb',
+        'video_id',
+    ];
 }

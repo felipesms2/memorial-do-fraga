@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 use App\Models\Video;
+use App\Models\Thumbnail;
 use Carbon\Carbon;
 use App\Traits\AdditionalVideoDataTrait;
 
@@ -120,9 +121,7 @@ fclose($file);
             $titles = [];
 foreach ($data->items as $item)
 {
-    $this->prepareThumb($item->snippet->thumbnails);
-    // dd(key((array)$item->snippet->thumbnails));
-    return $item->snippet->thumbnails;
+
     $sni = $item->snippet;
     // $table->string("title");
     // $table->string("channelId");
@@ -166,8 +165,12 @@ foreach ($data->items as $item)
             "liveBroadcastContent" => $liveBroadcastContent,
         ]
     );
+    $thumbToInsert =$this->prepareThumb($item->snippet->thumbnails, $insertVideo->id);
+    foreach ($thumbToInsert as $tti)
+        {
+            $thumInserted[] = Thumbnail::create($tti);
+        }
 
-    return $insertVideo;
         }
 
         dump($titles);
