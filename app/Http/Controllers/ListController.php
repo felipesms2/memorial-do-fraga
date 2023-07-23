@@ -67,6 +67,15 @@ class ListController extends Controller
                 {
                     Thumbnail::create($tti);
                 }
+                $tags = [];
+                if (isset($sni->tags))
+                {
+                    $tags = $sni->tags;
+                    foreach ($tags as $t)
+                    {
+                        Tag::create(["video_id" =>$insertVideo->id, "description" =>$t ]);
+                    }
+                }
 
 
 
