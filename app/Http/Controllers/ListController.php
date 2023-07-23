@@ -62,8 +62,13 @@ class ListController extends Controller
                         "liveBroadcastContent" => $liveBroadcastContent,
                     ]
                 );
+                $thumbToInsert = $this->prepareThumb($sni->thumbnails, $insertVideo->id);
+                foreach ($thumbToInsert as $tti)
+                {
+                    Thumbnail::create($tti);
+                }
 
-                
+
 
             }
 

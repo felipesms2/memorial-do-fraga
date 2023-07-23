@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Traits;
+use Carbon\Carbon;
 
 trait AdditionalVideoDataTrait
     {
@@ -45,6 +46,44 @@ trait AdditionalVideoDataTrait
             }
             fclose($file);
             return $bunchID;
+
+        }
+
+        public function buildVideoArray($obtainedData)
+        {
+            $data = $obtainedData;
+            foreach ($data->items as $item)
+            {
+                $sni = $item->snippet;
+                $sni->defaultAudioLanguage = "NONE";
+                $titles[]= $sni->title;
+                $title = $sni->title;
+                $channelId = $sni->channelId;
+                $kind=$item->kind;
+                $etag=$item->etag;
+                $video_id=$item->id;
+                $publishedAt = Carbon::parse($sni->publishedAt, 'UTC');
+                $description = $sni->description;
+                $categoryId = $sni->categoryId;
+                if(isset($sni->defaultAudioLanguage))
+                {
+                    $defaultAudioLanguage = $sni->defaultAudioLanguage;
+                }
+                $liveBroadcastContent = $sni->liveBroadcastContent;
+                $arrayToInsert = [
+                    "title" => $title,
+                    "channelId" => $channelId,
+                    "kind" => $kind,
+                    "video_id" => $video_id,
+                    "etag" => $etag,
+                    "publishedAt" => $publishedAt,
+                    "description" => $description,
+                    "categoryId" => $categoryId,
+                    "defaultAudioLanguage" => $defaultAudioLanguage,
+                    "liveBroadcastContent" => $liveBroadcastContent,
+                ];
+                return $arrayToInsert;
+            }
 
         }
     }
