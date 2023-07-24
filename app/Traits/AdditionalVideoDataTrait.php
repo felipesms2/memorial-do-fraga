@@ -1,7 +1,13 @@
 <?php
 
 namespace App\Traits;
+
+use App\Models\Thumbnail;
+use App\Models\Video;
 use Carbon\Carbon;
+use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Request;
+use Illuminate\Support\Facades\Storage;
 
 trait AdditionalVideoDataTrait
     {
@@ -86,5 +92,41 @@ trait AdditionalVideoDataTrait
             }
 
         }
+
+        public function downloadThumbs(){
+            $thumbs = Thumbnail::all();
+            foreach ($thumbs as $t) {
+                // Perform actions on each item
+                // You can access the item's properties using $item->property
+                if ( 1==1/* $t->video_id>=586 */)
+                {
+                    echo $t->url . "\n";
+                    $client = new Client();
+                    $response = $client->get($t->url);
+                    $folder = 'tmp/fraga';
+                    $fileName = $t->video_id . "_" . $t->title_thumb . '.jpg'; // Replace with the desired file name and extension
+                    Storage::put($folder.'/'.$fileName, $response->getBody());
+                }
+            }
+        }
+
+        public function downloadVideo()
+        {
+            $video = Video::all();
+            foreach ($video as $v)
+            {
+                $urlPrefix ="youtube.com/watch?v=";
+                $urlSufix = $v->video_id;
+                $placeToSave = ( __DIR__ . "../../../storage/app/videos/tmp");
+                shell_exec("
+                    cd $placeToSave;
+                    pytube " . $urlPrefix . $urlSufix . ";" .
+                    "mv * 1.mp4"
+                );
+                die("baixou");
+                echo $v->id . " - ";
+            }
+        }
+
     }
 
