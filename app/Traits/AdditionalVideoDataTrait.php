@@ -98,7 +98,7 @@ trait AdditionalVideoDataTrait
             foreach ($thumbs as $t) {
                 // Perform actions on each item
                 // You can access the item's properties using $item->property
-                if ( 1==1/* $t->video_id>=586 */)
+                if (  $t->video_id>=685)
                 {
                     echo $t->url . "\n";
                     $client = new Client();
@@ -115,15 +115,20 @@ trait AdditionalVideoDataTrait
             $video = Video::all();
             foreach ($video as $v)
             {
-                $urlPrefix ="youtube.com/watch?v=";
-                $urlSufix = $v->video_id;
-                $placeToSave = ( __DIR__ . "../../../storage/app/videos/tmp");
-                shell_exec("
-                    cd $placeToSave;
-                    pytube " . $urlPrefix . $urlSufix . ";" .
-                    "mv * 1.mp4"
-                );
-                die("baixou");
+                if ($v->id >=28)
+                {
+                    $urlPrefix ="youtube.com/watch?v=";
+                    $urlSufix = $v->video_id;
+                    $contentNumber = $v->id;
+                    $placeToSave = ( __DIR__ . "../../../storage/app/videos/tmp");
+                    shell_exec("
+                        cd $placeToSave;
+                        pytube " . $urlPrefix . $urlSufix . ";" .
+                        "mv *.mp4 ../$contentNumber.mp4"
+                    );
+                }
+
+                // die("baixou");
                 echo $v->id . " - ";
             }
         }
