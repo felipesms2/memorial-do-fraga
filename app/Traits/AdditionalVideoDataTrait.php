@@ -98,7 +98,7 @@ trait AdditionalVideoDataTrait
             foreach ($thumbs as $t) {
                 // Perform actions on each item
                 // You can access the item's properties using $item->property
-                if (  $t->video_id>=685)
+                if (  $t->video_id>=0)
                 {
                     echo $t->url . "\n";
                     $client = new Client();
@@ -115,7 +115,7 @@ trait AdditionalVideoDataTrait
             $video = Video::all();
             foreach ($video as $v)
             {
-                if ($v->id >=28)
+                if ($v->id >0)
                 {
                     $urlPrefix ="youtube.com/watch?v=";
                     $urlSufix = $v->video_id;
