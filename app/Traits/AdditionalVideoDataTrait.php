@@ -14,10 +14,17 @@ trait AdditionalVideoDataTrait
 
         public function listFiles()
         {
-             $s = storage_path();
-             $s = $s . "storage/app/videos/";
-             $videos = Storage::allFiles('your/folder/path');
-             return $videos;
+            $s = storage_path() . "/app/videos/";
+            $files = scandir($s);
+            $mp4Files = array_filter($files, function ($file) {
+                return pathinfo($file, PATHINFO_EXTENSION) === 'mp4';
+            });
+            sort($mp4Files, SORT_NUMERIC);
+            return $mp4Files;
+
+$mp4Files = array_filter($files, function ($file) {
+    return pathinfo($file, PATHINFO_EXTENSION) === 'mp4';
+});
         }
         public function prepareThumb($thumbData, $video_id = 0)
         {
