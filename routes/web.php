@@ -19,3 +19,6 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::get('/', [ListController::class, 'index']);
+Route::get('/c', [ListController::class, 'checkList']);
+
+Route::get('check', function(){return view('check');});

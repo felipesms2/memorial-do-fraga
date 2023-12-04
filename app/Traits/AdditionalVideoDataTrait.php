@@ -11,6 +11,14 @@ use Illuminate\Support\Facades\Storage;
 
 trait AdditionalVideoDataTrait
     {
+
+        public function listFiles()
+        {
+             $s = storage_path();
+             $s = $s . "storage/app/videos/";
+             $videos = Storage::allFiles('your/folder/path');
+             return $videos;
+        }
         public function prepareThumb($thumbData, $video_id = 0)
         {
             $thumbToInsert =[];
@@ -98,7 +106,7 @@ trait AdditionalVideoDataTrait
             foreach ($thumbs as $t) {
                 // Perform actions on each item
                 // You can access the item's properties using $item->property
-                if (  $t->video_id>=0)
+                if (  $t->video_id>=792)
                 {
                     echo $t->url . "\n";
                     $client = new Client();

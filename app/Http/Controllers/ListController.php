@@ -17,6 +17,11 @@ class ListController extends Controller
      * Display a listing of the resource.
      */
 
+    public function checkList()
+    {
+        
+        return $this->listFiles();
+    }
     public function index()
     {
         $fileToRead  = __DIR__ . "../../../../resources/video_list.csv";
