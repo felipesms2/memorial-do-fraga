@@ -19,8 +19,8 @@ class ListController extends Controller
 
     public function checkList()
     {
-        
-        return $this->listFiles();
+
+        return view('check', ["files" => $this->listFiles()]);
     }
     public function index()
     {
