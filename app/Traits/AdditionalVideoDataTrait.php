@@ -127,7 +127,7 @@ trait AdditionalVideoDataTrait
                 // Perform actions on each item
                 // You can access the item's properties using $item->property
                 // if (  in_array($t->video_id, $missing))
-                if ($t->video_id >=300)
+                if ($t->video_id >=0)
                 {
                     echo /* $t->url . */ " - " .$t->video_id . " ";
                     shell_exec("clear");
